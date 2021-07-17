@@ -54,18 +54,16 @@ public class RomanArabicConverter {
 
         return sb.toString();
     }
-
+    /** Метод определяет Арабские числа или римские */
     public static Number getNumber(String number) throws InputExpressionException {
-        if(number.matches("^[^1]?[^0-9]$")){
-            if (number.matches("^M{0,4}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$")){
-                return Number.ROMAN;
-            }else{
-                // если и не арабское и не римское
-                throw new InputExpressionException();
-            }
-        }else{
-            // Значить это арабское число
+
+        if(number.matches("[0-9]{1,2}")){
             return Number.ARABIC;
+        }else if (number.matches("^M{0,4}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$")){
+            return Number.ROMAN;
+        }else{
+            // если и не арабское и не римское
+            throw new InputExpressionException();
         }
     }
 }

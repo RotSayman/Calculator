@@ -9,13 +9,12 @@ public class RoamCalculateImpl implements Calculateble{
     private final int number1;
     private final int number2;
 
-    public RoamCalculateImpl(String input) throws InputExpressionException {
-        String[] s = input.split(" ");
-        if(s.length > 2){
+    public RoamCalculateImpl(String[] input) throws InputExpressionException {
+        if(input.length > 3){
             throw new InputExpressionException();
         }
-        this.number1 = RomanArabicConverter.romanToArabic(s[0]);
-        this.number2 = RomanArabicConverter.romanToArabic(s[1]);
+        this.number1 = RomanArabicConverter.romanToArabic(input[0]);
+        this.number2 = RomanArabicConverter.romanToArabic(input[2]);
         if(number1 > 10 || number2 > 10){
             throw new InputExpressionException();
         }

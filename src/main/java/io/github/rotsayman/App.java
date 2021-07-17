@@ -1,10 +1,16 @@
 package io.github.rotsayman;
 
+import io.github.rotsayman.calculate.ArabicCalculateImpl;
+import io.github.rotsayman.calculate.RoamCalculateImpl;
+import io.github.rotsayman.convertor.RomanArabicConverter;
+import io.github.rotsayman.enums.Number;
 import io.github.rotsayman.exceptions.InputExpressionException;
+import io.github.rotsayman.interfaces.Calculateble;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.logging.Logger;
 
 /**
  * <h1>Задача: “Калькулятор”</h1>
@@ -31,21 +37,66 @@ public class App
 
     public static void main( String[] args )
     {
-        inputUser();
+        // Запуск калькулятора
+        go();
     }
     /** Ввод данных (число) (оператор) (число) или (римское число) (оператор) (римское число) */
-    public static void inputUser(){
+    public static void go(){
         try(BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))){
+            System.out.println("Для выхода введите q");
             // Ввод операции
             String number;
             do{
                 number = reader.readLine();
-
+                // Проверяем ввод на валидность
+                if(number.matches("^[IVX|0-9]{1,2}\\s[+*-/]\\s[IVX|0-9]{1,2}$")){
+                    String[] operations = number.split("\\s");
+                    Number wNum;
+                    Calculateble calc;
+                    int result;
+                    // Проверка римские или арабские
+                    if(!RomanArabicConverter.getNumber(operations[0]).equals(RomanArabicConverter.getNumber(operations[2]))){
+                        throw new InputExpressionException();
+                    }
+                    switch (RomanArabicConverter.getNumber(operations[0])){
+                        case ROMAN:
+                            calc = new RoamCalculateImpl(operations);
+                            wNum = Number.ROMAN;
+                            Logger.getLogger(App.class.getName()).info("ROMAN NUMBER");
+                            break;
+                        case ARABIC:
+                            calc = new ArabicCalculateImpl(operations);
+                            wNum = Number.ARABIC;
+                            Logger.getLogger(RomanArabicConverter.class.getName()).info("ARAB NUMBER");
+                            break;
+                        default: throw new InputExpressionException();
+                    }
+                    // Выполнение операции
+                    switch (operations[1]){
+                        case "+" : result = calc.add(); break;
+                        case "-" : result = calc.sub(); break;
+                        case "*" : result = calc.mult(); break;
+                        case  "/" : result = calc.div(); break;
+                        default: throw new InputExpressionException();
+                    }
+                    // Ввывод результата
+                    switch (wNum){
+                        case ROMAN:
+                            System.out.println(RomanArabicConverter.arabicToRoman(result));
+                            break;
+                        case ARABIC:
+                            System.out.println(result);
+                            break;
+                        default: throw new InputExpressionException();
+                    }
+                }else{
+                    throw new InputExpressionException();
+                }
 
             }while(!number.equals("q"));
-        }catch (IOException ioe){
+        }catch (IOException | InputExpressionException ioe){
             ioe.printStackTrace();
-            System.err.println("System input Error.");
+            System.err.println("Не верная операция в терминале. (Маска ввода [1 + 1])");
         }
 
     }
