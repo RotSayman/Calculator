@@ -49,7 +49,7 @@ public class App
             do{
                 number = reader.readLine();
                 // Проверяем ввод на валидность
-                if(number.matches("^[IVX|0-9]{1,2}\\s[+*-/]\\s[IVX|0-9]{1,2}$")){
+                if(number.matches("^[IVX|0-9]{1,3}\\s[+*-/]\\s[IVX|0-9]{1,3}$")){
                     String[] operations = number.split("\\s");
                     Number wNum;
                     Calculateble calc;
