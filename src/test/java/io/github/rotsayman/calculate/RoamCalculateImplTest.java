@@ -1,9 +1,9 @@
 package io.github.rotsayman.calculate;
 
+import io.github.rotsayman.convertor.RomanArabicConverter;
 import io.github.rotsayman.exceptions.InputExpressionException;
 import io.github.rotsayman.interfaces.Calculateble;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -37,5 +37,23 @@ class RoamCalculateImplTest {
     @Test
     void div() {
         assertEquals(calculateble.div(), 2);
+    }
+
+    @Test
+    void allCalc() throws InputExpressionException {
+        Calculateble calc;
+        String[] str;
+        for (int i = 1 ;  i <= 10; i++){
+            for (int j = 1; j <= 10; j++) {
+                str  = new String[]{RomanArabicConverter.arabicToRoman(i)," + ", RomanArabicConverter.arabicToRoman(j)};
+                calc = new RoamCalculateImpl(str);
+                calc.add();
+                calc.mult();
+                calc.sub();
+                calc.div();
+            }
+        }
+        System.out.println("OK!");
+        assertTrue(true);
     }
 }
